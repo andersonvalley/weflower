@@ -1,10 +1,17 @@
+import React from 'react'
 import Header from './components/header/Header'
 import Categories from './components/categories/Categories'
 import Sort from './components/sort/Sort'
-import PizzaBlock from './components/pizzaBlock/pizzaBlock'
+import PizzaBlock from './components/pizzaBlock/PizzaBlock'
 import './scss/app.scss'
+import axios from 'axios'
+import { useFetch } from './hooks/useFetch'
+import { Loader } from './components/ui/Loader'
 
 function App() {
+  const url = 'https://628bbe0e7886bbbb37be8ea8.mockapi.io/pizzas'
+  const { items, loading, errors } = useFetch(url)
+
   return (
     <div className='wrapper'>
       <Header />
@@ -16,8 +23,11 @@ function App() {
           </div>
           <h2 className='content__title'>Все пиццы</h2>
           <div className='content__items'>
-            <PizzaBlock title='Мексиканская' price={500} />
-            <PizzaBlock title='Мексиканская' price={500} />
+            {loading && <Loader />}
+            {errors && <p>Ошибка, попробуйте еще раз</p>}
+            {items.map(obj => {
+              return <PizzaBlock key={obj.id} {...obj} />
+            })}
           </div>
         </div>
       </div>

@@ -1,23 +1,41 @@
 import React from 'react'
 
-function pizzaBlock({ title, price }) {
+function PizzaBlock({ title, price, imageUrl, types, sizes }) {
+  const [activeType, setActiveType] = React.useState(0)
+  const [activeSize, setActiveSize] = React.useState(0)
+
+  const typeNames = ['тонкое', 'традиционное']
+
   return (
     <div className='pizza-block'>
-      <img
-        className='pizza-block__image'
-        src='https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg'
-        alt='Pizza'
-      />
+      <img className='pizza-block__image' src={imageUrl} alt={title} />
       <h4 className='pizza-block__title'>{title}</h4>
       <div className='pizza-block__selector'>
         <ul>
-          <li className='active'>тонкое</li>
-          <li>традиционное</li>
+          {types.map((item, index) => {
+            return (
+              <li
+                onClick={() => setActiveType(index)}
+                key={item}
+                className={activeType === index ? 'active' : ''}
+              >
+                {typeNames[item]}
+              </li>
+            )
+          })}
         </ul>
         <ul>
-          <li className='active'>26 см.</li>
-          <li>30 см.</li>
-          <li>40 см.</li>
+          {sizes.map((item, index) => {
+            return (
+              <li
+                key={item}
+                onClick={() => setActiveSize(index)}
+                className={activeSize === index ? 'active' : ''}
+              >
+                {item} см.
+              </li>
+            )
+          })}
         </ul>
       </div>
       <div className='pizza-block__bottom'>
@@ -36,11 +54,11 @@ function pizzaBlock({ title, price }) {
             />
           </svg>
           <span>Добавить</span>
-          <i>2</i>
+          <i>1</i>
         </div>
       </div>
     </div>
   )
 }
 
-export default pizzaBlock
+export default PizzaBlock

@@ -1,8 +1,24 @@
 import React from 'react'
 
 function Sort() {
+  const sortTypes = ['популярности', 'цене', 'алфавиту']
+  const sort = React.useRef(null)
+  const [isVisible, setIsVisible] = React.useState(false)
+  const [selected, setSelected] = React.useState(sortTypes[0])
+
+  const sortHandler = item => {
+    setSelected(item)
+    setIsVisible(false)
+  }
+
+  React.useEffect(() => {
+    document.addEventListener('mousedown', e => {
+      if (sort.current && !sort.current.contains(e.target)) setIsVisible(false)
+    })
+  }, [sort])
+
   return (
-    <div className='sort'>
+    <div ref={sort} className={isVisible ? 'sort sort__popup-active' : 'sort'}>
       <div className='sort__label'>
         <svg
           width='10'
@@ -17,15 +33,25 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setIsVisible(!isVisible)}>{selected}</span>
       </div>
-      <div className='sort__popup'>
-        <ul>
-          <li className='active'>популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {isVisible && (
+        <div ref={sort} className='sort__popup'>
+          <ul>
+            {sortTypes.map(item => {
+              return (
+                <li
+                  key={item}
+                  onClick={() => sortHandler(item)}
+                  className={selected === item ? 'active' : ''}
+                >
+                  {item}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }
