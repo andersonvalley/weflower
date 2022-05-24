@@ -1,36 +1,19 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeItem, removeAll, incrementQuant, decrementQuant } from '../../redux/reducers/cartItemsSlice'
 import { Link } from 'react-router-dom'
 
-function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
-  const removeItem = item => {
-    setCartItems(cartItems.filter(obj => obj.id !== item.id))
-  }
-
-  const { totalPrice, totalQuantity } = countTotalPriceAndQuantity()
-
-  function quantityCalc(item, operator) {
-    if (operator === 'minus') {
-      if (item.quantity < 2) return
-      item.quantity -= 1
-    } else if (operator === 'plus') {
-      item.quantity += 1
-    }
-
-    setCartItems([...cartItems])
-  }
+function CartFull() {
+  const { totalPrice, totalQuantity } = useSelector(state => state.total)
+  const cartItems = useSelector(state => state.addToCart.cartItems)
+  const dispatch = useDispatch()
 
   return (
     <div className='container container--cart'>
       <div className='cart'>
         <div className='cart__top'>
           <h2 className='content__title'>
-            <svg
-              width='18'
-              height='18'
-              viewBox='0 0 18 18'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
+            <svg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M6.33333 16.3333C7.06971 16.3333 7.66667 15.7364 7.66667 15C7.66667 14.2636 7.06971 13.6667 6.33333 13.6667C5.59695 13.6667 5 14.2636 5 15C5 15.7364 5.59695 16.3333 6.33333 16.3333Z'
                 stroke='white'
@@ -55,14 +38,8 @@ function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
             </svg>
             Корзина
           </h2>
-          <div onClick={() => setCartItems([])} className='cart__clear'>
-            <svg
-              width='20'
-              height='20'
-              viewBox='0 0 20 20'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
+          <div onClick={() => dispatch(removeAll())} className='cart__clear'>
+            <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M2.5 5H4.16667H17.5'
                 stroke='#B6B6B6'
@@ -99,7 +76,7 @@ function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
         <div className='content__items content__items-cart'>
           {cartItems.map(item => {
             return (
-              <div key={item.title + item.price} className='cart__item'>
+              <div key={item.title + item.price + item.sizes + item.types} className='cart__item'>
                 <div className='cart__item-img'>
                   <img className='pizza-block__image' src={item.imageUrl} alt={item.title} />
                 </div>
@@ -111,7 +88,7 @@ function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
                 </div>
                 <div className='cart__item-count'>
                   <div
-                    onClick={() => quantityCalc(item, 'minus')}
+                    onClick={() => dispatch(decrementQuant(item))}
                     className='button button--outline button--circle cart__item-count-minus'
                   >
                     <svg
@@ -133,7 +110,7 @@ function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
                   </div>
                   <b>{item.quantity}</b>
                   <div
-                    onClick={() => quantityCalc(item, 'plus')}
+                    onClick={() => dispatch(incrementQuant(item))}
                     className='button button--outline button--circle cart__item-count-plus'
                   >
                     <svg
@@ -157,7 +134,7 @@ function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
                 <div className='cart__item-price'>
                   <b>{item.price * item.quantity} ₽</b>
                 </div>
-                <div onClick={() => removeItem(item)} className='cart__item-remove'>
+                <div onClick={() => dispatch(removeItem(item))} className='cart__item-remove'>
                   <div className='button button--outline button--circle'>
                     <svg
                       width='10'
@@ -194,13 +171,7 @@ function CartFull({ cartItems, setCartItems, countTotalPriceAndQuantity }) {
           </div>
           <div className='cart__bottom-buttons'>
             <Link to='/' className='button button--outline button--add go-back-btn'>
-              <svg
-                width='8'
-                height='14'
-                viewBox='0 0 8 14'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
+              <svg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
                 <path
                   d='M7 13L1 6.93015L6.86175 1'
                   stroke='#D3D3D3'

@@ -6,63 +6,37 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import './scss/app.scss'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { addItem } from './redux/reducers/cartItemsSlice'
+import { count } from './redux/reducers/totalSlice'
+
 function App() {
-  const [cartItems, setCartItems] = React.useState([])
+  const dispatch = useDispatch()
+  const ca = useSelector(state => state.total)
+  const cartItems = useSelector(state => state.addToCart.cartItems)
 
   const addItemToCart = (obj, activeSize, activeType, price) => {
-    let newObj = Object.assign({}, obj)
-    newObj.types = activeType
-    newObj.sizes = newObj.sizes[activeSize]
-    newObj.price = price
-    newObj.quantity = 1
+    let newItems = Object.assign({}, obj, {
+      types: activeType,
+      sizes: obj.sizes[activeSize],
+      price: price,
+      quantity: 1,
+    })
 
-    const double = cartItems.find(obj => obj.id === newObj.id)
-    if (!!double) {
-      double.quantity += 1
-      setCartItems([...cartItems])
-      return
-    }
-
-    setCartItems([...cartItems, newObj])
+    dispatch(addItem(newItems))
   }
 
-  const countTotalPriceAndQuantity = () => {
-    let totalPrice = 0
-    let totalQuantity = 0
-
-    for (let i = 0; i < cartItems.length; i++) {
-      totalPrice += cartItems[i].price * cartItems[i].quantity
-      totalQuantity += cartItems[i].quantity
-    }
-
-    return { totalPrice, totalQuantity }
-  }
+  React.useEffect(() => {
+    dispatch(count(cartItems))
+  }, [cartItems])
 
   return (
     <div className='wrapper'>
-      <Header countTotalPriceAndQuantity={countTotalPriceAndQuantity} cartItems={cartItems} />
+      <Header cartItems={cartItems} />
       <div className='content'>
         <Routes>
-          <Route
-            path='/'
-            element={
-              <Home
-                countTotalPriceAndQuantity={countTotalPriceAndQuantity}
-                addItemToCart={addItemToCart}
-                cartItems={cartItems}
-              />
-            }
-          />
-          <Route
-            path='/cart'
-            element={
-              <Cart
-                cartItems={cartItems}
-                setCartItems={setCartItems}
-                countTotalPriceAndQuantity={countTotalPriceAndQuantity}
-              />
-            }
-          />
+          <Route path='/' element={<Home addItemToCart={addItemToCart} />} />
+          <Route path='/cart' element={<Cart />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

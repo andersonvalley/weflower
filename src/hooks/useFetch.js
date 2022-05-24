@@ -24,5 +24,5 @@ export const useFetch = url => {
     fetching()
   }, [url])
 
-  return { items, loading, errors }
+  return { items, setItems, loading, errors }
 }

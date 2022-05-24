@@ -1,19 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-function PizzaBlock({
-  title,
-  price,
-  imageUrl,
-  types,
-  sizes,
-  addItemToCart,
-  obj,
-  cartItems,
-  quantityCalc,
-}) {
+function PizzaBlock({ title, price, imageUrl, types, sizes, addItemToCart, obj }) {
   const [activeType, setActiveType] = React.useState(0)
   const [activeSize, setActiveSize] = React.useState(0)
-
+  const cartItems = useSelector(state => state.addToCart.cartItems)
   const typeNames = ['тонкое', 'традиционное']
 
   function countPrice(price) {

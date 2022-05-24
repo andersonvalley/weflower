@@ -5,7 +5,7 @@ import Sort from '../components/sort/Sort'
 import { Loader } from '../components/ui/Loader'
 import { useFetch } from '../hooks/useFetch'
 
-function Home({ addItemToCart, countTotalPriceAndQuantity, cartItems, quantityCalc }) {
+function Home({ addItemToCart, countTotalPriceAndQuantity, quantityCalc }) {
   const url = 'https://628bbe0e7886bbbb37be8ea8.mockapi.io/pizzas'
   const { items, loading, errors } = useFetch(url)
 
@@ -25,7 +25,6 @@ function Home({ addItemToCart, countTotalPriceAndQuantity, cartItems, quantityCa
               countTotalPriceAndQuantity={countTotalPriceAndQuantity}
               addItemToCart={addItemToCart}
               obj={obj}
-              cartItems={cartItems}
               key={obj.id}
               quantityCalc={quantityCalc}
               {...obj}
