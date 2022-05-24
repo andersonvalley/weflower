@@ -1,35 +1,49 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import Categories from '../components/categories/Categories'
 import PizzaBlock from '../components/pizzaBlock/PizzaBlock'
 import Sort from '../components/sort/Sort'
 import { Loader } from '../components/ui/Loader'
 import { useFetch } from '../hooks/useFetch'
 
-function Home({ addItemToCart, countTotalPriceAndQuantity, quantityCalc }) {
-  const url = 'https://628bbe0e7886bbbb37be8ea8.mockapi.io/pizzas'
-  const { items, loading, errors } = useFetch(url)
+function Home({ addItemToCart, searchInput }) {
+  const [activeIndex, setActiveIndex] = React.useState(0)
+  const items = useSelector(state => state.product.items)
+  const { fetching, loading, errors } = useFetch()
+
+  React.useEffect(() => {
+    fetching()
+  }, [])
+
+  const onClickCategory = index => {
+    setActiveIndex(index)
+    if (index === 0) {
+      fetching()
+      return
+    }
+    fetching(`?category=${index}`)
+  }
+
+  const searched = useMemo(() => {
+    return items.filter(item => item.title.toLowerCase().includes(searchInput.toLowerCase()))
+  }, [searchInput, items])
 
   return (
     <div className='container'>
       <div className='content__top'>
-        <Categories />
+        <Categories
+          onClickCategory={onClickCategory}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+        />
         <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>
         {errors && <p>Ошибка, попробуйте еще раз</p>}
         {loading && <Loader />}
-        {items.map(obj => {
-          return (
-            <PizzaBlock
-              countTotalPriceAndQuantity={countTotalPriceAndQuantity}
-              addItemToCart={addItemToCart}
-              obj={obj}
-              key={obj.id}
-              quantityCalc={quantityCalc}
-              {...obj}
-            />
-          )
+        {searched.map(obj => {
+          return <PizzaBlock key={obj.id} addItemToCart={addItemToCart} obj={obj} />
         })}
       </div>
     </div>

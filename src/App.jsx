@@ -11,8 +11,9 @@ import { addItem } from './redux/reducers/cartItemsSlice'
 import { count } from './redux/reducers/totalSlice'
 
 function App() {
+  const [searchInput, setSearchInput] = React.useState('')
+
   const dispatch = useDispatch()
-  const ca = useSelector(state => state.total)
   const cartItems = useSelector(state => state.addToCart.cartItems)
 
   const addItemToCart = (obj, activeSize, activeType, price) => {
@@ -28,14 +29,14 @@ function App() {
 
   React.useEffect(() => {
     dispatch(count(cartItems))
-  }, [cartItems])
+  }, [cartItems, dispatch])
 
   return (
     <div className='wrapper'>
-      <Header cartItems={cartItems} />
+      <Header searchInput={searchInput} setSearchInput={setSearchInput} />
       <div className='content'>
         <Routes>
-          <Route path='/' element={<Home addItemToCart={addItemToCart} />} />
+          <Route path='/' element={<Home searchInput={searchInput} addItemToCart={addItemToCart} />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='*' element={<NotFound />} />
         </Routes>

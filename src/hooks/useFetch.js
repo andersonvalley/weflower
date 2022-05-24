@@ -1,28 +1,28 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setItems } from '../redux/reducers/productsSlice'
 
-export const useFetch = url => {
-  const [items, setItems] = useState([])
+export const useFetch = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState('')
+  const dispatch = useDispatch()
 
-  React.useEffect(() => {
-    const fetching = async () => {
-      try {
-        setErrors('')
-        setLoading(true)
-        const { data } = await axios.get(url)
-        setItems(data)
-      } catch (error) {
-        setErrors(error)
-        setItems([])
-      } finally {
-        setLoading(false)
-      }
+  const fetching = async (params = '') => {
+    const url = `https://628bbe0e7886bbbb37be8ea8.mockapi.io/pizzas${params}`
+
+    try {
+      setLoading(true)
+      setErrors(null)
+      const { data } = await axios.get(url)
+      dispatch(setItems(data))
+    } catch (error) {
+      dispatch(setItems([]))
+      setErrors(error.message)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    fetching()
-  }, [url])
-
-  return { items, setItems, loading, errors }
+  return { fetching, loading, errors }
 }
