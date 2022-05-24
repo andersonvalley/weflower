@@ -1,10 +1,29 @@
 import React from 'react'
 
-function PizzaBlock({ title, price, imageUrl, types, sizes }) {
+function PizzaBlock({
+  title,
+  price,
+  imageUrl,
+  types,
+  sizes,
+  addItemToCart,
+  obj,
+  cartItems,
+  quantityCalc,
+}) {
   const [activeType, setActiveType] = React.useState(0)
   const [activeSize, setActiveSize] = React.useState(0)
 
   const typeNames = ['тонкое', 'традиционное']
+
+  function countPrice(price) {
+    if (activeSize === 1) {
+      return Math.round(price + (price / 100) * 5)
+    } else if (activeSize === 2) {
+      return Math.round(price + (price / 100) * 10)
+    }
+    return price
+  }
 
   return (
     <div className='pizza-block'>
@@ -38,9 +57,18 @@ function PizzaBlock({ title, price, imageUrl, types, sizes }) {
           })}
         </ul>
       </div>
-      <div className='pizza-block__bottom'>
-        <div className='pizza-block__price'>от {price} ₽</div>
-        <div className='button button--outline button--add'>
+      <div
+        onClick={() => addItemToCart(obj, activeSize, typeNames[activeType], countPrice(price))}
+        className='pizza-block__bottom'
+      >
+        <div className='pizza-block__price'>от {countPrice(price)} ₽</div>
+        <div
+          className={
+            cartItems.find(o => o.id === obj.id)
+              ? 'button button--outline button--add button--added'
+              : 'button button--outline button--add'
+          }
+        >
           <svg
             width='12'
             height='12'
@@ -54,7 +82,6 @@ function PizzaBlock({ title, price, imageUrl, types, sizes }) {
             />
           </svg>
           <span>Добавить</span>
-          <i>1</i>
         </div>
       </div>
     </div>

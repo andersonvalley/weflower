@@ -13,6 +13,22 @@
   &__logo {
     display: flex;
 
+    @media (max-width: 645px) {
+      flex-direction: column;
+
+      img {
+        margin-bottom: 7px;
+      }
+
+      h1 {
+        font-size: 19px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+
     img {
       margin-right: 15px;
     }

@@ -2,9 +2,9 @@ import React from 'react'
 import ContentLoader from 'react-content-loader'
 
 export const Loader = props =>
-  Array.apply(null, Array(8)).map(() => {
+  [...new Array(8)].map((_, index) => {
     return (
-      <div className='loaders'>
+      <div className='loaders' key={index}>
         <ContentLoader
           speed={2}
           width={280}
