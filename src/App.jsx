@@ -4,28 +4,14 @@ import Header from './components/header/Header'
 import Cart from './pages/Cart'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
+import { useDispatch, useSelector } from 'react-redux'
+import { count } from './redux/slices/cartItemsSlice'
+import FavoritesPage from './pages/FavoritesPage'
 import './scss/app.scss'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { addItem } from './redux/reducers/cartItemsSlice'
-import { count } from './redux/reducers/totalSlice'
-
 function App() {
-  const [searchInput, setSearchInput] = React.useState('')
-
+  const { cartItems } = useSelector(state => state.cartItems)
   const dispatch = useDispatch()
-  const cartItems = useSelector(state => state.addToCart.cartItems)
-
-  const addItemToCart = (obj, activeSize, activeType, price) => {
-    let newItems = Object.assign({}, obj, {
-      types: activeType,
-      sizes: obj.sizes[activeSize],
-      price: price,
-      quantity: 1,
-    })
-
-    dispatch(addItem(newItems))
-  }
 
   React.useEffect(() => {
     dispatch(count(cartItems))
@@ -33,11 +19,12 @@ function App() {
 
   return (
     <div className='wrapper'>
-      <Header searchInput={searchInput} setSearchInput={setSearchInput} />
+      <Header />
       <div className='content'>
         <Routes>
-          <Route path='/' element={<Home searchInput={searchInput} addItemToCart={addItemToCart} />} />
+          <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/favorites' element={<FavoritesPage />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

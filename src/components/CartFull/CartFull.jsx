@@ -1,18 +1,18 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeItem, removeAll, incrementQuant, decrementQuant } from '../../redux/reducers/cartItemsSlice'
+import { removeItem, removeAll, incrementQuant, decrementQuant } from '../../redux/slices/cartItemsSlice'
 import { Link } from 'react-router-dom'
+import styles from './cart.module.scss'
 
 function CartFull() {
-  const { totalPrice, totalQuantity } = useSelector(state => state.total)
-  const cartItems = useSelector(state => state.addToCart.cartItems)
+  const { totalPrice, totalQuantity, cartItems } = useSelector(state => state.cartItems)
   const dispatch = useDispatch()
 
   return (
     <div className='container container--cart'>
-      <div className='cart'>
-        <div className='cart__top'>
-          <h2 className='content__title'>
+      <div>
+        <div className={styles.top}>
+          <h2 className={styles.title}>
             <svg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M6.33333 16.3333C7.06971 16.3333 7.66667 15.7364 7.66667 15C7.66667 14.2636 7.06971 13.6667 6.33333 13.6667C5.59695 13.6667 5 14.2636 5 15C5 15.7364 5.59695 16.3333 6.33333 16.3333Z'
@@ -38,7 +38,7 @@ function CartFull() {
             </svg>
             Корзина
           </h2>
-          <div onClick={() => dispatch(removeAll())} className='cart__clear'>
+          <div onClick={() => dispatch(removeAll())} className={styles.clear}>
             <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M2.5 5H4.16667H17.5'
@@ -69,46 +69,39 @@ function CartFull() {
                 strokeLinejoin='round'
               />
             </svg>
-
             <span>Очистить корзину</span>
           </div>
         </div>
-        <div className='content__items content__items-cart'>
+        <div className={styles.content}>
           {cartItems.map(item => {
             return (
-              <div key={item.title + item.price + item.sizes + item.types} className='cart__item'>
-                <div className='cart__item-img'>
+              <div key={item.title + item.price + item.sizes + item.types} className={styles.cartItem}>
+                <div className={styles.cartItemImg}>
                   <img className='pizza-block__image' src={item.imageUrl} alt={item.title} />
                 </div>
-                <div className='cart__item-info'>
+                <div className={styles.info}>
                   <h3>{item.title}</h3>
                   <p>
                     {item.types} тесто, {item.sizes} см.
                   </p>
                 </div>
-                <div className='cart__item-count'>
+                <div className={styles.count}>
                   <div
                     onClick={() => dispatch(decrementQuant(item))}
                     className='button button--outline button--circle cart__item-count-minus'
                   >
                     <svg
-                      width='10'
-                      height='10'
-                      viewBox='0 0 10 10'
-                      fill='none'
                       xmlns='http://www.w3.org/2000/svg'
+                      xmlnsXlink='http://www.w3.org/1999/xlink'
+                      version='1.1'
+                      viewBox='0 0 512 512'
+                      width='15px'
+                      xmlSpace='preserve'
                     >
-                      <path
-                        d='M5.92001 3.84V5.76V8.64C5.92001 9.17016 5.49017 9.6 4.96001 9.6C4.42985 9.6 4.00001 9.17016 4.00001 8.64L4 5.76L4.00001 3.84V0.96C4.00001 0.42984 4.42985 0 4.96001 0C5.49017 0 5.92001 0.42984 5.92001 0.96V3.84Z'
-                        fill='#EB5A1E'
-                      />
-                      <path
-                        d='M5.75998 5.92001L3.83998 5.92001L0.959977 5.92001C0.429817 5.92001 -2.29533e-05 5.49017 -2.29301e-05 4.96001C-2.2907e-05 4.42985 0.429817 4.00001 0.959977 4.00001L3.83998 4L5.75998 4.00001L8.63998 4.00001C9.17014 4.00001 9.59998 4.42985 9.59998 4.96001C9.59998 5.49017 9.17014 5.92001 8.63998 5.92001L5.75998 5.92001Z'
-                        fill='#EB5A1E'
-                      />
+                      <path d='M417.4,224H94.6C77.7,224,64,238.3,64,256c0,17.7,13.7,32,30.6,32h322.8c16.9,0,30.6-14.3,30.6-32  C448,238.3,434.3,224,417.4,224z' />
                     </svg>
                   </div>
-                  <b>{item.quantity}</b>
+                  <span>{item.quantity}</span>
                   <div
                     onClick={() => dispatch(incrementQuant(item))}
                     className='button button--outline button--circle cart__item-count-plus'
@@ -131,10 +124,10 @@ function CartFull() {
                     </svg>
                   </div>
                 </div>
-                <div className='cart__item-price'>
+                <div className={styles.price}>
                   <b>{item.price * item.quantity} ₽</b>
                 </div>
-                <div onClick={() => dispatch(removeItem(item))} className='cart__item-remove'>
+                <div onClick={() => dispatch(removeItem(item))} className={styles.cartItem__remove}>
                   <div className='button button--outline button--circle'>
                     <svg
                       width='10'
@@ -158,8 +151,8 @@ function CartFull() {
             )
           })}
         </div>
-        <div className='cart__bottom'>
-          <div className='cart__bottom-details'>
+        <div className={styles.bottom}>
+          <div className={styles.bottom__details}>
             <span>
               {' '}
               Всего пицц: <b>{totalQuantity} шт.</b>{' '}
@@ -169,18 +162,8 @@ function CartFull() {
               Сумма заказа: <b>{totalPrice} ₽</b>{' '}
             </span>
           </div>
-          <div className='cart__bottom-buttons'>
+          <div className={styles.bottom__buttons}>
             <Link to='/' className='button button--outline button--add go-back-btn'>
-              <svg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                <path
-                  d='M7 13L1 6.93015L6.86175 1'
-                  stroke='#D3D3D3'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
-
               <span>Вернуться назад</span>
             </Link>
             <div className='button pay-btn'>

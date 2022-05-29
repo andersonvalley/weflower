@@ -1,0 +1,26 @@
+.favorites {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: rgb(242, 242, 242);
+  cursor: pointer;
+  transition: 200ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 15px;
+
+  &:hover {
+    background-color: darken($color: rgb(242, 242, 242), $amount: 5);
+  }
+
+  @media (max-width: 1120px) {
+    margin-left: 5px;
+  }
+}
+
+.icon {
+  fill: darken($color: rgb(240, 109, 44), $amount: 5);
+  width: 30px;
+  height: 30px;
+}

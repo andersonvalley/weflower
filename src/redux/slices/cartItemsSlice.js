@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   cartItems: [],
+  totalPrice: 0,
+  totalQuantity: 0,
 }
 
 const cartItemsSlice = createSlice({
-  name: 'addToCart',
+  name: 'cartItems',
   initialState,
   reducers: {
     addItem: (state, action) => {
@@ -38,9 +40,18 @@ const cartItemsSlice = createSlice({
       if (double.quantity < 2) return
       double.quantity -= 1
     },
+    count: (state, action) => {
+      state.totalPrice = 0
+      state.totalQuantity = 0
+      action.payload.forEach(element => {
+        state.totalQuantity += element.quantity
+        state.totalPrice += element.price * element.quantity
+      })
+    },
   },
 })
 
-export const { addItem, removeItem, removeAll, decrementQuant, incrementQuant } = cartItemsSlice.actions
+export const { addItem, removeItem, removeAll, decrementQuant, incrementQuant, count } =
+  cartItemsSlice.actions
 
 export default cartItemsSlice.reducer

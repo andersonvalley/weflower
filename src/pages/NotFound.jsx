@@ -1,21 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import Empty from '../components/empty/Empty'
+import icon from '../assets/img/error-404.png'
 
 function NotFound() {
-  return (
-    <div className='container container--cart'>
-      <div className='cart cart--empty'>
-        <h2>
-          404 <span>😕</span>
-        </h2>
-        <p>Ничего не найдено</p>
-        <br />
-        <Link to='/' className='button button--black'>
-          <span>Вернуться на главную</span>
-        </Link>
-      </div>
-    </div>
-  )
+  return <Empty title=' 404' descr='Ничего не найдено' img={icon} />
 }
 
 export default NotFound

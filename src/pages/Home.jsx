@@ -1,50 +1,66 @@
 import React, { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Categories from '../components/categories/Categories'
-import PizzaBlock from '../components/pizzaBlock/PizzaBlock'
+import Empty from '../components/empty/Empty'
+import SearchIcon from '../assets/img/finder.png'
+import Products from '../components/Products/Products'
 import Sort from '../components/sort/Sort'
 import { Loader } from '../components/ui/Loader'
 import { useFetch } from '../hooks/useFetch'
+import { searchItems, setCategory } from '../redux/slices/filterSlice'
 
-function Home({ addItemToCart, searchInput }) {
-  const [activeIndex, setActiveIndex] = React.useState(0)
-  const items = useSelector(state => state.product.items)
+function Home() {
+  const { items } = useSelector(state => state.products)
+  const { searchValue, sortBy } = useSelector(state => state.filter)
   const { fetching, loading, errors } = useFetch()
+  const dispatch = useDispatch()
 
   React.useEffect(() => {
+    dispatch(setCategory(0))
     fetching()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onClickCategory = index => {
-    setActiveIndex(index)
-    if (index === 0) {
+    dispatch(setCategory(index))
+
+    if (!index) {
       fetching()
+      dispatch(searchItems(''))
       return
     }
-    fetching(`?category=${index}`)
+
+    fetching(index)
+    dispatch(searchItems(''))
   }
 
-  const searched = useMemo(() => {
-    return items.filter(item => item.title.toLowerCase().includes(searchInput.toLowerCase()))
-  }, [searchInput, items])
+  const sortedItems = useMemo(() => {
+    if (sortBy.prop === 'title') {
+      return [...items].sort((a, b) => a.title.localeCompare(b.title))
+    }
+    return [...items].sort((a, b) => a[sortBy.prop] - b[sortBy.prop])
+  }, [sortBy, items])
+
+  const sortedAndSearchedItems = useMemo(() => {
+    return sortedItems.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
+  }, [searchValue, sortedItems])
 
   return (
     <div className='container'>
       <div className='content__top'>
-        <Categories
-          onClickCategory={onClickCategory}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-        />
+        <Categories onClickCategory={onClickCategory} />
         <Sort />
       </div>
-      <h2 className='content__title'>Все пиццы</h2>
+      {loading && <Loader />}
+      {!sortedAndSearchedItems.length ? (
+        <Empty title='Ничего не найдено' img={SearchIcon} />
+      ) : (
+        <h2 className='content__title'>Все товары</h2>
+      )}
       <div className='content__items'>
         {errors && <p>Ошибка, попробуйте еще раз</p>}
-        {loading && <Loader />}
-        {searched.map(obj => {
-          return <PizzaBlock key={obj.id} addItemToCart={addItemToCart} obj={obj} />
-        })}
+        {sortedAndSearchedItems.map(obj => (
+          <Products key={obj.id} obj={obj} />
+        ))}
       </div>
     </div>
   )

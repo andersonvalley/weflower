@@ -1,0 +1,248 @@
+.pizzaBlock {
+  width: 280px;
+  text-align: center;
+  height: 511px;
+  position: relative;
+
+  &:hover .favorites {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 1%;
+  margin-bottom: 20px;
+  height: 52px;
+}
+
+.img {
+  width: 100%;
+
+  img {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+    object-position: center;
+  }
+}
+
+.selector {
+  display: flex;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  flex-direction: column;
+  padding: 5px;
+
+  ul {
+    display: flex;
+    flex: 1;
+
+    &:first-of-type {
+      margin-bottom: 6px;
+    }
+
+    li {
+      padding: 8px;
+      flex: 1;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.types {
+  padding: 2px !important;
+}
+
+.active {
+  background: #ffffff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+  cursor: auto;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: 0.015em;
+}
+
+.discount {
+  width: 27px;
+  height: 27px;
+  border-radius: 50px;
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+
+  &__icon {
+    animation: rotate 0.25s infinite alternate ease-in-out;
+  }
+}
+
+.hover {
+  border-radius: 10px;
+  position: absolute;
+  right: -255px;
+  top: -70px;
+  z-index: 10;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 15%);
+  min-width: 260px;
+  padding: 10px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 200ms;
+
+  p {
+    font-weight: 700;
+  }
+
+  span {
+    span {
+      text-decoration: line-through;
+    }
+  }
+
+  @media (max-width: 520px) {
+    top: -50px;
+    padding: 5px;
+  }
+}
+
+.discount:hover .hover {
+  visibility: visible;
+  opacity: 1;
+}
+
+.badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transform: scale(0.16);
+
+  &__left {
+    transform-origin: 0 0;
+    z-index: 1;
+    position: absolute;
+    left: -50px;
+
+    &::before {
+      border-radius: 50%;
+      height: 70px;
+      position: absolute;
+      transform-origin: 100% 0;
+      width: 70px;
+      top: 0;
+      content: '';
+      animation: xAxisLeft 0.8s infinite both cubic-bezier(0, 0, 0.63, 0.9);
+    }
+  }
+
+  &__right {
+    right: 0;
+    z-index: 1;
+
+    &::before {
+      border-radius: 50%;
+      height: 70px;
+      position: absolute;
+      transform-origin: 100% 0;
+      width: 70px;
+      top: 0;
+      left: 0;
+      content: '';
+      animation: xAxisRight 0.8s infinite both cubic-bezier(0.32, 0.03, 0.56, 0.86);
+      animation-delay: -0.25s;
+    }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(10deg);
+  }
+
+  to {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes xAxisLeft {
+  from {
+    transform: translate(0);
+  }
+
+  to {
+    transform: translateY(-190px) scale(0);
+    background-color: #20ac96;
+  }
+}
+
+@keyframes xAxisRight {
+  from {
+    transform: translate(0);
+  }
+
+  to {
+    transform: translateY(-120px) scale(0);
+    background-color: #20ac96;
+  }
+}
+
+.favorites {
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  background-color: rgb(242, 242, 242);
+  cursor: pointer;
+  transition: 200ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 15px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0;
+  visibility: hidden;
+
+  &__active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &:hover {
+    background-color: darken($color: rgb(242, 242, 242), $amount: 5);
+  }
+
+  @media (max-width: 1120px) {
+    margin-left: 5px;
+  }
+}
+
+.icon {
+  fill: darken($color: rgb(240, 109, 44), $amount: 5);
+  width: 20px;
+  height: 20px;
+}

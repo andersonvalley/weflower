@@ -1,0 +1,37 @@
+.categories {
+  width: 70%;
+
+  @media (max-width: 990px) {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  &__list {
+    display: flex;
+  }
+}
+
+.item {
+  background-color: #f9f9f9;
+  padding: 13px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+  white-space: nowrap;
+  width: fit-content;
+  pointer-events: none;
+
+  &:hover {
+    background-color: darken(#f9f9f9, 2%);
+  }
+
+  @media (max-width: 520px) {
+    padding: 10px 20px;
+  }
+}
+
+.active {
+  background-color: #fe5f1e !important;
+  color: #fff;
+}
