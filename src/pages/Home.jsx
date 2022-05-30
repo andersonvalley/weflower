@@ -8,14 +8,18 @@ import Sort from '../components/sort/Sort'
 import { Loader } from '../components/ui/Loader'
 import { useFetch } from '../hooks/useFetch'
 import { searchItems, setCategory } from '../redux/slices/filterSlice'
-import { addItem } from '../redux/slices/cartItemsSlice'
-import { setFavorite } from '../redux/slices/favoritesSlice'
+import { useNavigate } from 'react-router-dom'
+import ProductById from '../components/productById/ProductById'
 
 function Home() {
+  const [showModal, setShowModal] = React.useState(false)
+  const [modalInfo, setModalInfo] = React.useState({})
   const { items } = useSelector(state => state.products)
   const { searchValue, sortBy } = useSelector(state => state.filter)
   const { fetching, loading, errors } = useFetch()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  document.body.style.overflow = showModal ? 'hidden' : ''
 
   const onClickCategory = index => {
     dispatch(setCategory(index))
@@ -28,6 +32,17 @@ function Home() {
 
     fetching(index)
     dispatch(searchItems(''))
+  }
+
+  function showModalHandler(obj) {
+    setShowModal(true)
+    setModalInfo(obj)
+    navigate(`product/${obj.id}`, { replace: true })
+  }
+
+  function closeModal() {
+    setShowModal(false)
+    navigate('/', { replace: true })
   }
 
   React.useEffect(() => {
@@ -60,8 +75,15 @@ function Home() {
       )}
       <div className='content__items'>
         {errors && <p>Ошибка, попробуйте еще раз</p>}
+        {showModal && <ProductById item={modalInfo} closeModal={closeModal} />}
         {sortedAndSearchedItems.map(obj => (
-          <Products key={obj.id} obj={obj} />
+          <Products
+            setShowModal={setShowModal}
+            setModalInfo={setModalInfo}
+            showModalHandler={showModalHandler}
+            key={obj.id}
+            obj={obj}
+          />
         ))}
       </div>
     </div>

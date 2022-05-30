@@ -1,12 +1,13 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { searchItems } from '../../../redux/slices/filterSlice'
 import styles from './favorites.module.scss'
 
 function Favorites(props) {
   const dispatch = useDispatch()
-  
+  const { favorites } = useSelector(state => state.favorites)
+  const countFavorites = !favorites.length ? '' : favorites.length
   return (
     <Link onClick={() => dispatch(searchItems(''))} to='/favorites' className={styles.favorites} {...props}>
       <svg
@@ -29,6 +30,7 @@ function Favorites(props) {
           />
         </g>
       </svg>
+      <span className={!favorites.length ? 'hidden' : styles.count}>{countFavorites}</span>
     </Link>
   )
 }

@@ -38,8 +38,9 @@ function App() {
       <div className='content'>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/cart' element={<Cart />} />
-          <Route path='/favorites' element={<FavoritesPage />} />
+          <Route path='product/:id' element={<Home />} />
+          <Route path='/cart' exact element={<Cart />} />
+          <Route path='/favorites' exact element={<FavoritesPage />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

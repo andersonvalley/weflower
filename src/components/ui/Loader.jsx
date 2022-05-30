@@ -1,7 +1,7 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
-export const Loader = props => {
+export const Loader = () => {
   return (
     <div className='loading'>
       {[...new Array(8)].map((_, index) => {
@@ -24,6 +24,25 @@ export const Loader = props => {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+export const Spinner = () => {
+  return (
+    <div className='lds-spinner'>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
   )
 }

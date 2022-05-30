@@ -1,4 +1,4 @@
-.pizzaBlock {
+.productBlock {
   width: 280px;
   text-align: center;
   height: 511px;
@@ -59,6 +59,10 @@
 
 .types {
   padding: 2px !important;
+}
+
+.wr {
+  cursor: pointer;
 }
 
 .active {

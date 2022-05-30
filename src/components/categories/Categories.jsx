@@ -20,7 +20,27 @@ function Categories({ onClickCategory }) {
 
   return (
     <div className={styles.categories}>
-      <Swiper spaceBetween={10} slidesPerView={1.8}>
+      <Swiper
+        spaceBetween={10}
+        slidesPerView={5.3}
+        breakpoints={{
+          320: {
+            slidesPerView: 2,
+          },
+
+          500: {
+            slidesPerView: 3,
+          },
+
+          768: {
+            slidesPerView: 3.8,
+          },
+
+          1100: {
+            slidesPerView: 4.3,
+          },
+        }}
+      >
         <div className={styles.categories__list}>
           {categories.map((item, index) => {
             return (

@@ -1,22 +1,24 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocalStorage } from '../../hooks/useLocaStorage'
+import { useParams } from 'react-router-dom'
 import { addItem } from '../../redux/slices/cartItemsSlice'
 import { setFavorite } from '../../redux/slices/favoritesSlice'
 import styles from './products.module.scss'
 
-function Products({ obj }) {
+export const typeNames = ['только цветок', 'в подарочной упаковке']
+export const discount = obj => Math.trunc(obj.price - (obj.price / 100) * obj.discount)
+
+function Products({ obj, showModalHandler, setModalInfo, setShowModal }) {
   const [activeType, setActiveType] = React.useState(0)
   const [activeSize, setActiveSize] = React.useState(0)
   const { cartItems } = useSelector(state => state.cartItems)
   const { favorites } = useSelector(state => state.favorites)
   const dispatch = useDispatch()
 
-  const typeNames = ['только цветок', 'в подарочной упаковке']
   const addedItems = cartItems.find(
     item => item.id === obj.id && item.sizes === obj.sizes[activeSize] && item.types === typeNames[activeType]
   )
-  const priceWithDiscount = Math.trunc(obj.price - (obj.price / 100) * obj.discount)
+  const priceWithDiscount = discount(obj)
 
   function countingPrice() {
     const priceOfPackage = 300
@@ -38,18 +40,27 @@ function Products({ obj }) {
   }
 
   const addItemToCart = (obj, activeSize, activeType, price) => {
-    const newItems = Object.assign({}, obj, {
+    const newItem = Object.assign({}, obj, {
       types: activeType,
       sizes: obj.sizes[activeSize],
       price: price,
       quantity: 1,
     })
 
-    dispatch(addItem(newItems))
+    dispatch(addItem(newItem))
   }
 
+  const { id } = useParams()
+  React.useEffect(() => {
+    if (id === undefined) return
+    if (obj.id === id) {
+      setShowModal(true)
+      setModalInfo(obj)
+    }
+  }, [id, obj, setModalInfo, setShowModal])
+
   return (
-    <div className={styles.pizzaBlock}>
+    <div className={styles.productBlock}>
       {!!obj.discount && (
         <div className={styles.discount}>
           <div className={styles.badges}>
@@ -108,10 +119,12 @@ function Products({ obj }) {
         </svg>
       </div>
 
-      <div className={styles.img}>
-        <img src={obj.imageUrl} alt={obj.title} />
+      <div className={styles.wr} onClick={() => showModalHandler(obj)}>
+        <div className={styles.img}>
+          <img src={obj.imageUrl} alt={obj.title} />
+        </div>
+        <h4 className={styles.title}>{obj.title}</h4>
       </div>
-      <h4 className={styles.title}>{obj.title}</h4>
       <div className={styles.selector}>
         <ul>
           {obj.types &&

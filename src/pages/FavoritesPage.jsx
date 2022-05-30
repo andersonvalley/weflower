@@ -6,7 +6,6 @@ import Products from '../components/Products/Products'
 
 function FavoritesPage() {
   const { favorites } = useSelector(state => state.favorites)
-  console.log(favorites)
 
   return (
     <>
