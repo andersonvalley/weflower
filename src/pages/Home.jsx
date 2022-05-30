@@ -8,17 +8,14 @@ import Sort from '../components/sort/Sort'
 import { Loader } from '../components/ui/Loader'
 import { useFetch } from '../hooks/useFetch'
 import { searchItems, setCategory } from '../redux/slices/filterSlice'
+import { addItem } from '../redux/slices/cartItemsSlice'
+import { setFavorite } from '../redux/slices/favoritesSlice'
 
 function Home() {
   const { items } = useSelector(state => state.products)
   const { searchValue, sortBy } = useSelector(state => state.filter)
   const { fetching, loading, errors } = useFetch()
   const dispatch = useDispatch()
-
-  React.useEffect(() => {
-    dispatch(setCategory(0))
-    fetching()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onClickCategory = index => {
     dispatch(setCategory(index))
@@ -32,6 +29,11 @@ function Home() {
     fetching(index)
     dispatch(searchItems(''))
   }
+
+  React.useEffect(() => {
+    dispatch(setCategory(0))
+    fetching()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const sortedItems = useMemo(() => {
     if (sortBy.prop === 'title') {

@@ -31,7 +31,7 @@ function Header() {
           <InputSearch value={searchValue} onChange={e => searchHandler(e)} />
           <Favorites />
           <div className={styles.cart}>
-            <Link to='/cart' className='button button--cart'>
+            <Link onClick={() => dispatch(searchItems(''))} to='/cart' className='button button--cart'>
               <span>{totalPrice} ₽</span>
               <div className='button__delimiter'></div>
               <svg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'>

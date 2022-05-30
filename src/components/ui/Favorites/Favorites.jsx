@@ -1,10 +1,14 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { searchItems } from '../../../redux/slices/filterSlice'
 import styles from './favorites.module.scss'
 
 function Favorites(props) {
+  const dispatch = useDispatch()
+  
   return (
-    <Link to='/favorites' className={styles.favorites} {...props}>
+    <Link onClick={() => dispatch(searchItems(''))} to='/favorites' className={styles.favorites} {...props}>
       <svg
         className={styles.icon}
         version='1.1'

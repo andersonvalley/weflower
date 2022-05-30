@@ -1,10 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocalStorage } from '../../hooks/useLocaStorage'
 import { addItem } from '../../redux/slices/cartItemsSlice'
 import { setFavorite } from '../../redux/slices/favoritesSlice'
 import styles from './products.module.scss'
 
-function PizzaBlock({ obj }) {
+function Products({ obj }) {
   const [activeType, setActiveType] = React.useState(0)
   const [activeSize, setActiveSize] = React.useState(0)
   const { cartItems } = useSelector(state => state.cartItems)
@@ -12,7 +13,9 @@ function PizzaBlock({ obj }) {
   const dispatch = useDispatch()
 
   const typeNames = ['только цветок', 'в подарочной упаковке']
-  const addedItems = cartItems.find(item => item.id === obj.id && item.sizes === obj.sizes[activeSize] && item.types === typeNames[activeType])
+  const addedItems = cartItems.find(
+    item => item.id === obj.id && item.sizes === obj.sizes[activeSize] && item.types === typeNames[activeType]
+  )
   const priceWithDiscount = Math.trunc(obj.price - (obj.price / 100) * obj.discount)
 
   function countingPrice() {
@@ -164,4 +167,4 @@ function PizzaBlock({ obj }) {
   )
 }
 
-export default PizzaBlock
+export default Products
