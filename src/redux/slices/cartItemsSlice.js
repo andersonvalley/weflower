@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 const initialState = {
   cartItems: [],
@@ -27,9 +28,11 @@ const cartItemsSlice = createSlice({
     removeItem: (state, action) => {
       const items = state.cartItems.filter(item => item.id !== action.payload.id)
       state.cartItems = items
+      toast('Все хорошо...')
     },
     removeAll: state => {
       state.cartItems = []
+      toast('Все хорошо...')
     },
     incrementQuant: (state, action) => {
       const double = state.cartItems.find(item => item.id === action.payload.id)

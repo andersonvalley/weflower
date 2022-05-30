@@ -1,15 +1,26 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeItem, removeAll, incrementQuant, decrementQuant } from '../../redux/slices/cartItemsSlice'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import styles from './cartItems.module.scss'
 
 function CartItems() {
   const { totalPrice, totalQuantity, cartItems } = useSelector(state => state.cartItems)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const notify = () => toast('Заказ оплачен')
+
+  function payHandler() {
+    notify()
+    dispatch(removeAll())
+    navigate('/', { replace: true })
+  }
 
   return (
     <div className='container container--cart'>
+      {<ToastContainer />}
       <div>
         <div className={styles.top}>
           <h2 className={styles.title}>
@@ -166,7 +177,7 @@ function CartItems() {
             <Link to='/' className='button button--outline button--add go-back-btn'>
               <span>Вернуться назад</span>
             </Link>
-            <div className='button pay-btn'>
+            <div onClick={payHandler} className='button pay-btn'>
               <span>Оплатить сейчас</span>
             </div>
           </div>

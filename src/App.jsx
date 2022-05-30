@@ -11,6 +11,7 @@ import { setFavorite } from './redux/slices/favoritesSlice'
 import { useLocalStorage } from './hooks/useLocaStorage'
 
 import './scss/app.scss'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   const { cartItems } = useSelector(state => state.cartItems)
@@ -35,6 +36,7 @@ function App() {
   return (
     <div className='wrapper'>
       <Header />
+      {<ToastContainer />}
       <div className='content'>
         <Routes>
           <Route path='/' element={<Home />} />

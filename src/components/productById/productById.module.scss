@@ -17,10 +17,21 @@
   border-radius: 20px;
   background-color: #fff;
   width: 70%;
-  height: 70%;
+  height: 60%;
   display: flex;
   justify-content: space-around;
   padding: 30px 20px;
+
+  @media (max-width: 1080px) {
+    width: 90%;
+    height: 90%;
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    width: 98%;
+    height: 97%;
+  }
 }
 
 .img {
@@ -29,9 +40,37 @@
   align-items: center;
   position: relative;
   padding: 10px;
+  overflow: hidden;
+
+  &:hover {
+    img {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 700px) {
+    top: -30px;
+  }
 
   img {
     width: 320px;
+    transition: 200ms;
+
+    @media (max-width: 1080px) {
+      width: 260px;
+    }
+
+    @media (max-width: 780px) {
+      width: 210px;
+    }
+
+    @media (max-width: 700px) {
+      width: 190px;
+    }
+
+    @media (max-height: 410px) {
+      width: 150px;
+    }
   }
 
   &:hover {
@@ -44,16 +83,37 @@
 
 .text {
   width: 50%;
+  margin-left: 15px;
+  overflow: scroll;
+
+  @media (max-width: 1080px) {
+    width: 70%;
+  }
+
+  @media (max-width: 700px) {
+    margin-top: -40px;
+    width: 100%;
+    margin-left: 0;
+  }
 
   h1 {
     font-size: 40px;
     max-width: 90%;
     margin-bottom: 5px;
+
+    @media (max-width: 700px) {
+      font-size: 24px;
+      max-width: 100%;
+    }
   }
 
   p {
     font-size: 20px;
     margin-bottom: 5px;
+
+    @media (max-width: 700px) {
+      font-size: 17px;
+    }
   }
 }
 
@@ -73,6 +133,10 @@
   font-weight: 700;
   font-size: 36px;
   margin-right: 20px;
+
+  @media (max-width: 700px) {
+    font-size: 27px;
+  }
 }
 
 .oldPrice {
@@ -109,10 +173,73 @@
   @media (max-width: 1120px) {
     margin-left: 5px;
   }
+
+  @media (max-width: 700px) {
+    top: 20px;
+    left: 10px;
+    height: 45px;
+    width: 45px;
+  }
 }
 
 .icon {
   fill: darken($color: rgb(240, 109, 44), $amount: 5);
   width: 35px;
   height: 35px;
+}
+
+.remove {
+  height: 40px;
+  width: 40px;
+  background-color: #eee;
+  border-radius: 50px;
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+  transition: 200ms;
+  cursor: pointer;
+  z-index: 2;
+
+  &:hover {
+    background-color: darken($color: #eee, $amount: 5);
+  }
+}
+
+.recomend {
+  margin-top: 15px;
+
+  span {
+    font-weight: 700;
+    font-size: 22px;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+
+  svg {
+    margin-right: 10px;
+    position: relative;
+    top: -3px;
+  }
+
+  p {
+    font-weight: 700;
+
+    span {
+      font-weight: 500;
+    }
+  }
 }
