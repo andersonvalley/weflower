@@ -67,6 +67,10 @@
     width: 100%;
     justify-content: center;
   }
+
+  @media (max-width: 440px) {
+    flex-wrap: wrap;
+  }
 }
 
 .cart {

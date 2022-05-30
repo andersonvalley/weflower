@@ -28,11 +28,10 @@ const cartItemsSlice = createSlice({
     removeItem: (state, action) => {
       const items = state.cartItems.filter(item => item.id !== action.payload.id)
       state.cartItems = items
-      toast('Все хорошо...')
+      toast('🥹')
     },
     removeAll: state => {
       state.cartItems = []
-      toast('Все хорошо...')
     },
     incrementQuant: (state, action) => {
       const double = state.cartItems.find(item => item.id === action.payload.id)

@@ -13,7 +13,7 @@ function ProductById({ item, closeModal }) {
   const countRating = useCallback(() => {
     let rating = 0
     item.rating.map(num => {
-      rating += num / item.rating.length
+      return rating += num / item.rating.length
     })
 
     return rating
