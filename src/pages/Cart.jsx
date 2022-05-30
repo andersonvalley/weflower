@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Empty from '../components/empty/Empty'
-import CartFull from '../components/cartFull/CartFull'
+import CartFull from '../components/cartFull/CartItems'
 import empty from '../assets/img/empty-cart.png'
 
 function Cart() {

@@ -2,9 +2,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeItem, removeAll, incrementQuant, decrementQuant } from '../../redux/slices/cartItemsSlice'
 import { Link } from 'react-router-dom'
-import styles from './cart.module.scss'
+import styles from './cartItems.module.scss'
 
-function CartFull() {
+function CartItems() {
   const { totalPrice, totalQuantity, cartItems } = useSelector(state => state.cartItems)
   const dispatch = useDispatch()
 
@@ -176,4 +176,4 @@ function CartFull() {
   )
 }
 
-export default CartFull
+export default CartItems
