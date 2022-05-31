@@ -1,21 +1,23 @@
-import React, { useCallback } from 'react'
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { ModalContext } from '../../pages/Home'
 import { setFavorite } from '../../redux/slices/favoritesSlice'
 import { discount } from '../Products/Products'
 import styles from './productById.module.scss'
 
-function ProductById({ item, closeModal }) {
+function ProductById() {
   const { favorites } = useSelector(state => state.favorites)
   const dispatch = useDispatch()
+  const { closeModal, modalInfo } = useContext(ModalContext)
+  const item = modalInfo
 
   const discountPrice = discount(item)
 
-  const countRating = useCallback(() => {
+  const countRating = React.useMemo(() => {
     let rating = 0
     item.rating.map(num => {
-      return rating += num / item.rating.length
+      return (rating += num / item.rating.length)
     })
-
     return rating
   }, [item.rating])
 
@@ -92,7 +94,7 @@ function ProductById({ item, closeModal }) {
               ></path>
             </svg>
             <p>
-              {countRating()} <span>средняя оценка</span>
+              {countRating} <span>средняя оценка</span>
             </p>
           </div>
         </div>

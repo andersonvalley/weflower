@@ -11,6 +11,8 @@ import { searchItems, setCategory } from '../redux/slices/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import ProductById from '../components/productById/ProductById'
 
+export const ModalContext = React.createContext()
+
 function Home() {
   const [showModal, setShowModal] = React.useState(false)
   const [modalInfo, setModalInfo] = React.useState({})
@@ -49,6 +51,7 @@ function Home() {
     dispatch(setCategory(0))
     fetching()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  
 
   const sortedItems = useMemo(() => {
     if (sortBy.prop === 'title') {
@@ -73,19 +76,15 @@ function Home() {
       ) : (
         <h2 className='content__title'>Все товары</h2>
       )}
-      <div className='content__items'>
-        {errors && <p>Ошибка, попробуйте еще раз</p>}
-        {showModal && <ProductById item={modalInfo} closeModal={closeModal} />}
-        {sortedAndSearchedItems.map(obj => (
-          <Products
-            setShowModal={setShowModal}
-            setModalInfo={setModalInfo}
-            showModalHandler={showModalHandler}
-            key={obj.id}
-            obj={obj}
-          />
-        ))}
-      </div>
+      <ModalContext.Provider value={{ setShowModal, setModalInfo, modalInfo, showModalHandler, closeModal }}>
+        <div className='content__items'>
+          {errors && <p>Ошибка, попробуйте еще раз</p>}
+          {showModal && <ProductById />}
+          {sortedAndSearchedItems.map(obj => (
+            <Products key={obj.id} obj={obj} />
+          ))}
+        </div>
+      </ModalContext.Provider>
     </div>
   )
 }

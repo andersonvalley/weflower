@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { ModalContext } from '../../pages/Home'
 import { addItem } from '../../redux/slices/cartItemsSlice'
 import { setFavorite } from '../../redux/slices/favoritesSlice'
 import styles from './products.module.scss'
@@ -8,19 +9,26 @@ import styles from './products.module.scss'
 export const typeNames = ['только цветок', 'в подарочной упаковке']
 export const discount = obj => Math.trunc(obj.price - (obj.price / 100) * obj.discount)
 
-function Products({ obj, showModalHandler, setModalInfo, setShowModal }) {
+function Products({ obj }) {
+  const { id } = useParams()
   const [activeType, setActiveType] = React.useState(0)
   const [activeSize, setActiveSize] = React.useState(0)
   const { cartItems } = useSelector(state => state.cartItems)
   const { favorites } = useSelector(state => state.favorites)
   const dispatch = useDispatch()
+  const { showModalHandler, setModalInfo, setShowModal } = useContext(ModalContext)
 
-  const addedItems = cartItems.find(
-    item => item.id === obj.id && item.sizes === obj.sizes[activeSize] && item.types === typeNames[activeType]
+  const addedItems = useMemo(
+    () =>
+      cartItems.find(
+        item =>
+          item.id === obj.id && item.sizes === obj.sizes[activeSize] && item.types === typeNames[activeType]
+      ),
+    [activeSize, activeType, obj, cartItems]
   )
-  const priceWithDiscount = discount(obj)
+  const priceWithDiscount = useMemo(() => discount(obj), [obj])
 
-  function countingPrice() {
+  const countingPrice = useMemo(() => {
     const priceOfPackage = 300
     const percentOfSize = [10, 15]
     let newPrice = priceWithDiscount
@@ -31,9 +39,8 @@ function Products({ obj, showModalHandler, setModalInfo, setShowModal }) {
       newPrice = Math.round(priceWithDiscount + (priceWithDiscount / 100) * percentOfSize[1])
 
     if (activeType > 0) return newPrice + priceOfPackage
-
     return newPrice
-  }
+  }, [activeSize, activeType, priceWithDiscount])
 
   function addToFavorites() {
     dispatch(setFavorite(obj))
@@ -50,7 +57,6 @@ function Products({ obj, showModalHandler, setModalInfo, setShowModal }) {
     dispatch(addItem(newItem))
   }
 
-  const { id } = useParams()
   React.useEffect(() => {
     if (id === undefined) return
     if (obj.id === id) {
@@ -155,10 +161,10 @@ function Products({ obj, showModalHandler, setModalInfo, setShowModal }) {
         </ul>
       </div>
       <div
-        onClick={() => addItemToCart(obj, activeSize, typeNames[activeType], countingPrice())}
+        onClick={() => addItemToCart(obj, activeSize, typeNames[activeType], countingPrice)}
         className={styles.bottom}
       >
-        <div className={styles.price}>от {countingPrice()} ₽</div>
+        <div className={styles.price}>от {countingPrice} ₽</div>
         <div
           className={
             addedItems
