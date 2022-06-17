@@ -24,14 +24,14 @@ function App() {
   }, [cartItems, dispatch])
 
   React.useEffect(() => {
-    setItem('items', cartItems)
-    setItem('favorites', favorites)
-  }, [favorites, cartItems, setItem, dispatch])
-
-  React.useEffect(() => {
     getItem('favorites', item => dispatch(setFavorite(item)))
     getItem('items', item => dispatch(addItem(item)))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(() => {
+    setItem('items', cartItems)
+    setItem('favorites', favorites)
+  }, [favorites, cartItems, setItem, dispatch])
 
   return (
     <div className='wrapper'>
