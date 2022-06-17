@@ -51,7 +51,6 @@ function Home() {
     dispatch(setCategory(0))
     fetching()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  
 
   const sortedItems = useMemo(() => {
     if (sortBy.prop === 'title') {
@@ -76,12 +75,18 @@ function Home() {
       ) : (
         <h2 className='content__title'>Все товары</h2>
       )}
-      <ModalContext.Provider value={{ setShowModal, setModalInfo, modalInfo, showModalHandler, closeModal }}>
+      <ModalContext.Provider value={{ modalInfo, closeModal }}>
         <div className='content__items'>
           {errors && <p>Ошибка, попробуйте еще раз</p>}
           {showModal && <ProductById />}
           {sortedAndSearchedItems.map(obj => (
-            <Products key={obj.id} obj={obj} />
+            <Products
+              showModalHandler={showModalHandler}
+              setModalInfo={setModalInfo}
+              setShowModal={setShowModal}
+              key={obj.id}
+              obj={obj}
+            />
           ))}
         </div>
       </ModalContext.Provider>

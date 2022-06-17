@@ -1,7 +1,6 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { ModalContext } from '../../pages/Home'
 import { addItem } from '../../redux/slices/cartItemsSlice'
 import { setFavorite } from '../../redux/slices/favoritesSlice'
 import styles from './products.module.scss'
@@ -9,14 +8,13 @@ import styles from './products.module.scss'
 export const typeNames = ['только цветок', 'в подарочной упаковке']
 export const discount = obj => Math.trunc(obj.price - (obj.price / 100) * obj.discount)
 
-function Products({ obj }) {
+function Products({ obj, showModalHandler, setModalInfo, setShowModal }) {
   const { id } = useParams()
   const [activeType, setActiveType] = React.useState(0)
   const [activeSize, setActiveSize] = React.useState(0)
   const { cartItems } = useSelector(state => state.cartItems)
   const { favorites } = useSelector(state => state.favorites)
   const dispatch = useDispatch()
-  const { showModalHandler, setModalInfo, setShowModal } = useContext(ModalContext)
 
   const addedItems = useMemo(
     () =>
